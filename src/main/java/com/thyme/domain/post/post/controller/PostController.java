@@ -1,11 +1,16 @@
 package com.thyme.domain.post.post.controller;
 
+import org.hibernate.validator.constraints.Length;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import jakarta.validation.constraints.NotBlank;
+
+@Validated // @NotBlank, @Length를 사용하기 위해 @Validated 애너테이션을 클래스에 적용해야 한다
 @RequestMapping("/posts")
 @Controller
 public class PostController {
@@ -35,39 +40,13 @@ public class PostController {
 	@PostMapping("/write")
 	@ResponseBody
 	public String doWrite(
-			String title, // null이면 안되고, 5글자 이상이어야 한다
-			String content // null이면 안되고, 10글자 이상이어야 한다
+			@NotBlank @Length(min = 5) String title, // null이면 안되고, 5글자 이상이어야 한다
+			@NotBlank @Length(min = 10) String content // null이면 안되고, 10글자 이상이어야 한다
 	) { // 파라미터의 이름이 같으면 그대로 사용할 수 있다
-		// 이렇게 데이터의 유효성을 검증하는 것을 `Validation`이라고 한다
-		// 유효성 체크는(validation) front에서도, back단에서도 한다
-		if (title.isBlank() || title == null) {
-			return getFormHtml("제목을 입력해주세요");
-		}
-		if (content.isBlank() || title == null) {
-			return getFormHtml("내용을 입력해주세요");
-		}
-		if (title.length() < 5) {
-			return getFormHtml("제목은 5글자 이상 작성해주세요");
-		}
-		if (content.length() < 10) {
-			return getFormHtml("내용은 10글자 이상 작성해주세요");
-		}
-
 		return """
 			<h1>게시물 조회</h1>
 			<div>%s</div>
 			<div>%s</div>
 			""".formatted(title, content);
-	}
-
-	private static String getFormHtml(String errorMessage) {
-		return """
-			<div>%s</div>
-			<form method="post">
-				<input type="text" name="title" placeholder="제목" /> <br>
-				<textarea name="content"></textarea>
-				<input type="submit" value="등록" />
-			</form>
-			""".formatted(errorMessage);
 	}
 }
