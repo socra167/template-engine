@@ -36,19 +36,47 @@ public class PostController {
 	@ResponseBody
 	public String doWrite(String title, String content) { // 파라미터의 이름이 같으면 그대로 사용할 수 있다
 		if (title.isBlank() || title == null) {
-			return "제목을 입력해주세요";
+			return """
+				<div>%s</div>
+				<form method="post">
+					<input type="text" name="title" placeholder="제목" />
+					<textarea name="content"></textarea>
+					<input type="submit" value="등록" />
+				</form>
+				""".formatted("제목을 입력해주세요");
 		}
 
 		if (content.isBlank() || title == null) {
-			return "내용을 입력해주세요";
+			return """
+				<div>%s</div>
+				<form method="post">
+					<input type="text" name="title" placeholder="제목" />
+					<textarea name="content"></textarea>
+					<input type="submit" value="등록" />
+				</form>
+				""".formatted("내용을 입력해주세요");
 		}
 
 		if (title.length() < 5) {
-			return "제목은 5글자 이상 작성해주세요";
+			return """
+				<div>%s</div>
+				<form method="post">
+					<input type="text" name="title" placeholder="제목" />
+					<textarea name="content"></textarea>
+					<input type="submit" value="등록" />
+				</form>
+				""".formatted("제목은 5글자 이상 작성해주세요");
 		}
 
 		if (content.length() < 10) {
-			return "내용은 10글자 이상 작성해주세요";
+			return """
+				<div>%s</div>
+				<form method="post">
+					<input type="text" name="title" placeholder="제목" />
+					<textarea name="content"></textarea>
+					<input type="submit" value="등록" />
+				</form>
+				""".formatted("내용은 10글자 이상 작성해주세요");
 		}
 
 		return """
