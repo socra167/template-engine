@@ -43,6 +43,14 @@ public class PostController {
 			return "내용을 입력해주세요";
 		}
 
+		if (title.length() < 5) {
+			return "제목은 5글자 이상 작성해주세요";
+		}
+
+		if (content.length() < 10) {
+			return "내용은 10글자 이상 작성해주세요";
+		}
+
 		return """
 			<h1>게시물 조회</h1>
 			<div>%s</div>
