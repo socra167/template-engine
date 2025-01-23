@@ -41,8 +41,8 @@ public class PostController {
 	@PostMapping("/write")
 	@ResponseBody
 	public String doWrite(
-			@NotBlank @Length(min = 5) String title, // null이면 안되고, 5글자 이상이어야 한다
-			@NotBlank @Length(min = 10) String content // null이면 안되고, 10글자 이상이어야 한다
+			@NotBlank(message = "제목을 입력해주세요.") @Length(min = 5, message = "제목은 5글자 이상입니다.") String title, // null이면 안되고, 5글자 이상이어야 한다
+			@NotBlank(message = "제목은 5글자 이상입니다.") @Length(min = 10, message = "내용은 10글자 이상입니다.") String content // null이면 안되고, 10글자 이상이어야 한다
 	) { // 파라미터의 이름이 같으면 그대로 사용할 수 있다
 		return """
 			<h1>게시물 조회</h1>
