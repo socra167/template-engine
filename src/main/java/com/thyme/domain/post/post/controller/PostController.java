@@ -16,7 +16,7 @@ public class PostController {
 	public String showWrite() {
 		return """
 			<form method="post">
-				<input type="text" name="title" placeholder="제목" />
+				<input type="text" name="title" placeholder="제목" /> <br>
 				<textarea name="content"></textarea>
 				<input type="submit" value="등록" />
 			</form>
@@ -36,47 +36,19 @@ public class PostController {
 	@ResponseBody
 	public String doWrite(String title, String content) { // 파라미터의 이름이 같으면 그대로 사용할 수 있다
 		if (title.isBlank() || title == null) {
-			return """
-				<div>%s</div>
-				<form method="post">
-					<input type="text" name="title" placeholder="제목" />
-					<textarea name="content"></textarea>
-					<input type="submit" value="등록" />
-				</form>
-				""".formatted("제목을 입력해주세요");
+			return getFormHtml("제목을 입력해주세요");
 		}
 
 		if (content.isBlank() || title == null) {
-			return """
-				<div>%s</div>
-				<form method="post">
-					<input type="text" name="title" placeholder="제목" />
-					<textarea name="content"></textarea>
-					<input type="submit" value="등록" />
-				</form>
-				""".formatted("내용을 입력해주세요");
+			return getFormHtml("내용을 입력해주세요");
 		}
 
 		if (title.length() < 5) {
-			return """
-				<div>%s</div>
-				<form method="post">
-					<input type="text" name="title" placeholder="제목" />
-					<textarea name="content"></textarea>
-					<input type="submit" value="등록" />
-				</form>
-				""".formatted("제목은 5글자 이상 작성해주세요");
+			return getFormHtml("제목은 5글자 이상 작성해주세요");
 		}
 
 		if (content.length() < 10) {
-			return """
-				<div>%s</div>
-				<form method="post">
-					<input type="text" name="title" placeholder="제목" />
-					<textarea name="content"></textarea>
-					<input type="submit" value="등록" />
-				</form>
-				""".formatted("내용은 10글자 이상 작성해주세요");
+			return getFormHtml("내용은 10글자 이상 작성해주세요");
 		}
 
 		return """
@@ -84,5 +56,16 @@ public class PostController {
 			<div>%s</div>
 			<div>%s</div>
 			""".formatted(title, content);
+	}
+
+	private static String getFormHtml(String errorMessage) {
+		return """
+			<div>%s</div>
+			<form method="post">
+				<input type="text" name="title" placeholder="제목" /> <br>
+				<textarea name="content"></textarea>
+				<input type="submit" value="등록" />
+			</form>
+			""".formatted(errorMessage);
 	}
 }
