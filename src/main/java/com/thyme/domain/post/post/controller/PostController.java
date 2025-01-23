@@ -2,15 +2,18 @@ package com.thyme.domain.post.post.controller;
 
 import org.hibernate.validator.constraints.Length;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-@Validated  // @NotBlank, @Length를 사용하기 위해 @Validated 애너테이션을 클래스에 적용해야 한다
+//@Validated  // @NotBlank, @Length를 사용하기 위해 @Validated 애너테이션을 클래스에 적용해야 한다
 			// Validation은 `spring-boot-starter-validation` dependency가 추가되어야 사용할 수 있다
 @RequestMapping("/posts")
 @Controller
@@ -37,17 +40,26 @@ public class PostController {
 		// GET /posts/write: 폼 보여주기, POST /posts/write: 동일한 주소라도 HTTP 메서드가 다르면 가능하다
 	}
 
+	@AllArgsConstructor
+	@Getter
+	public static class WriteForm { // doWrite()의 파라미터들을 클래스로 분리했다
+		// 필드명과 GET 파라미터명은 여전히 같아야 한다
+		@NotBlank(message = "제목을 입력해주세요.") @Length(min = 5, message = "제목은 5글자 이상입니다.")
+		private String title; // null이면 안되고, 5글자 이상이어야 한다
+
+		@NotBlank(message = "제목은 5글자 이상입니다.") @Length(min = 10, message = "내용은 10글자 이상입니다.")
+		private String content; // null이면 안되고, 10글자 이상이어야 한다
+	}
+
 	// 서버로 데이터를 제출하기 위한 메서드로 POST를 사용한다
 	@PostMapping("/write")
 	@ResponseBody
-	public String doWrite(
-			@NotBlank(message = "제목을 입력해주세요.") @Length(min = 5, message = "제목은 5글자 이상입니다.") String title, // null이면 안되고, 5글자 이상이어야 한다
-			@NotBlank(message = "제목은 5글자 이상입니다.") @Length(min = 10, message = "내용은 10글자 이상입니다.") String content // null이면 안되고, 10글자 이상이어야 한다
-	) { // 파라미터의 이름이 같으면 그대로 사용할 수 있다
+	public String doWrite(@ModelAttribute @Valid WriteForm form) { 	// @ModelAttribute: 매개변수로 객체를 받겠다는 뜻
+																	// Model Attribute에 Validation을 적용하려면 파라미터에 @Valid를 적용해야 한다
 		return """
 			<h1>게시물 조회</h1>
 			<div>%s</div>
 			<div>%s</div>
-			""".formatted(title, content);
+			""".formatted(form.getTitle(), form.getContent());
 	}
 }
