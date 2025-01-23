@@ -35,6 +35,14 @@ public class PostController {
 	@PostMapping("/write")
 	@ResponseBody
 	public String doWrite(String title, String content) { // 파라미터의 이름이 같으면 그대로 사용할 수 있다
+		if (title.isBlank() || title == null) {
+			return "제목을 입력해주세요";
+		}
+
+		if (content.isBlank() || title == null) {
+			return "내용을 입력해주세요";
+		}
+
 		return """
 			<h1>게시물 조회</h1>
 			<div>%s</div>
