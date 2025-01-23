@@ -10,7 +10,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import jakarta.validation.constraints.NotBlank;
 
-@Validated // @NotBlank, @Length를 사용하기 위해 @Validated 애너테이션을 클래스에 적용해야 한다
+@Validated  // @NotBlank, @Length를 사용하기 위해 @Validated 애너테이션을 클래스에 적용해야 한다
+			// Validation은 `spring-boot-starter-validation` dependency가 추가되어야 사용할 수 있다
 @RequestMapping("/posts")
 @Controller
 public class PostController {
