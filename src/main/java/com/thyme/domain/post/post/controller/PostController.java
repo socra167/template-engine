@@ -120,6 +120,8 @@ public class PostController {
 
 		// 하지만, @ResponseBody를 제거하니 validation에 실패한 오류를 제대로 출력할 수 없어졌다 (HTML이 return 되지 않았다)
 		// @ResponseBody를 적용하지 않으면 반환값을 템플릿으로 인식하기 때문이다
+
+		// HTML 코드가 Java에 있으면 유지보수가 어려워진다 -> HTML 코드 분리
 	}
 
 	private String getFormHtml(String errorMessage, String title, String content) {
