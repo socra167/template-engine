@@ -1,5 +1,7 @@
 package com.thyme.domain.post.post.controller;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import org.hibernate.validator.constraints.Length;
@@ -9,6 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.thyme.domain.post.post.entity.Post;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -22,6 +26,32 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/posts")
 @Controller
 public class PostController {
+
+	List<Post> posts = new ArrayList<>();
+
+	public PostController() {
+		Post p1 = Post.builder()
+			.id(1L)
+			.title("title1")
+			.content("content1")
+			.build();
+
+		Post p2 = Post.builder()
+			.id(2L)
+			.title("title2")
+			.content("content2")
+			.build();
+
+		Post p3 = Post.builder()
+			.id(3L)
+			.title("title3")
+			.content("content3")
+			.build();
+
+		posts.add(p1);
+		posts.add(p2);
+		posts.add(p3);
+	}
 
 	// 서버로부터 정보를 요청하기 위한 메서드로 GET을 사용한다
 	@GetMapping("/write")
@@ -82,10 +112,24 @@ public class PostController {
 		return """
 			<form method="post">
 				<div>%s</div>
-				<input type="text" name="title" placeholder="제목" value=%s /> <br>
+				<input type="text" name="title" placeholder="제목" value="%s" /> <br>
 				<textarea name="content">%s</textarea>
 				<input type="submit" value="등록" />
 			</form>
 			""".formatted(errorMessage, title, content);
+	}
+
+	@GetMapping
+	@ResponseBody
+	private String showList() {
+		return """
+			<div>글 목록</div>
+			<ul>
+				<li>글1</li>
+				<li>글2</li>
+				<li>글3</li>
+				<a href="/posts/write">글쓰기</a>
+			</ul>
+			""";
 	}
 }
