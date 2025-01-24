@@ -85,7 +85,7 @@ public class PostController {
 
 	// 서버로 데이터를 제출하기 위한 메서드로 POST를 사용한다
 	@PostMapping("/write")
-	@ResponseBody
+	// @ResponseBody // ResponseBody를 적용하면 정직하게 문자열을 그대로 응답한다
 	public String doWrite(@Valid WriteForm form, BindingResult bindingResult) {
 		// @ModelAttribute: 매개변수로 객체를 받겠다는 뜻
 		// Model Attribute에 Validation을 적용하려면 파라미터에 @Valid를 적용해야 한다
@@ -111,13 +111,11 @@ public class PostController {
 
 		posts.add(post);
 
-		return showList(); // 이렇게 보여주면 작성 완료 후 새로고침을 할 때마다 게시글이 또 추가된다
+		// return showList(); 	// 이렇게 보여주면 작성 완료 후 새로고침을 할 때마다 게시글이 또 추가된다
+								// 마지막 요청이 posts/write (POST)
+								// posts/write(POST)후 posts(GET)으로 리다이렉트 시켜서 브라우저가 posts(GET)을 기억하도록 하면 해결할 수 있다
 
-		// return """
-		// 	<h1>게시물 조회</h1>
-		// 	<div>%s</div>
-		// 	<div>%s</div>
-		// 	""".formatted(form.getTitle(), form.getContent());
+		return "redirect:/posts"; // /posts로 리다이렉트, @ResponseBody를 적용하지 않아야 리다이렉트가 작동한다
 	}
 
 	private String getFormHtml(String errorMessage, String title, String content) {
