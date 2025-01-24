@@ -64,6 +64,9 @@ public class PostController {
 
 		// 파라미터에 BindingResult를 추가하니, Validation이 무시된다
 		// BindingResult는 validation의 결과를 수집하고, 프로그램은 그대로 실행된다
+		if (bindingResult.hasErrors()) {
+			return "validation 실패";
+		}
 
 		return """
 			<h1>게시물 조회</h1>
