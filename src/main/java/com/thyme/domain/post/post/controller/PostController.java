@@ -54,7 +54,7 @@ public class PostController {
 		@Length(min = 5, message = "제목은 5글자 이상입니다.")
 		private String title; // null이면 안되고, 5글자 이상이어야 한다
 
-		@NotBlank(message = "제목은 5글자 이상입니다.")
+		@NotBlank(message = "내용을 입력해주세요.")
 		@Length(min = 10, message = "내용은 10글자 이상입니다.")
 		private String content; // null이면 안되고, 10글자 이상이어야 한다
 	}
