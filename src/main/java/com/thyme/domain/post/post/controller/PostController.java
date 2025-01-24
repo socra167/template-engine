@@ -116,6 +116,8 @@ public class PostController {
 								// posts/write(POST)후 posts(GET)으로 리다이렉트 시켜서 브라우저가 posts(GET)을 기억하도록 하면 해결할 수 있다
 
 		return "redirect:/posts"; // /posts로 리다이렉트, @ResponseBody를 적용하지 않아야 리다이렉트가 작동한다
+
+		// 하지만, ResponseBody를 제거하니 validation에 실패한 오류를 제대로 출력할 수 없어졌다 (HTML이 return 되지 않았다)
 	}
 
 	private String getFormHtml(String errorMessage, String title, String content) {
