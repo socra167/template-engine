@@ -127,18 +127,8 @@ public class PostController {
 	}
 
 	@GetMapping
-	@ResponseBody
-	private String showList() {
-		String postTitles = posts.stream()
-			.map(post -> "<li>" + post.getTitle() + "</li>")
-			.collect(Collectors.joining());
-
-		return """
-			<div>글 목록</div>
-			<ul>
-				%s
-				<a href="/posts/write">글쓰기</a>
-			</ul>
-			""".formatted(postTitles);
+	private String showList(Model model) {
+		model.addAttribute("posts", posts);
+		return "domain/post/post/list";
 	}
 }
