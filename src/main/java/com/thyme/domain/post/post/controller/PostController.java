@@ -54,8 +54,9 @@ public class PostController {
 	// 서버로 데이터를 제출하기 위한 메서드로 POST를 사용한다
 	@PostMapping("/write")
 	@ResponseBody
-	public String doWrite(@ModelAttribute @Valid WriteForm form) { 	// @ModelAttribute: 매개변수로 객체를 받겠다는 뜻
+	public String doWrite(@Valid WriteForm form) { 	// @ModelAttribute: 매개변수로 객체를 받겠다는 뜻
 																	// Model Attribute에 Validation을 적용하려면 파라미터에 @Valid를 적용해야 한다
+																	// @ModelAttribute는 생략할 수 있다
 		return """
 			<h1>게시물 조회</h1>
 			<div>%s</div>
