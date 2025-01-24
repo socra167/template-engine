@@ -1,4 +1,7 @@
 <div>[[${errorMessage}]]</div>
+<!--기본적으로 변수(model attribute)는 ${변수명} 으로 사용한다. -->
+<!-- [[ ]] : 대괄호로 감싸지 않으면 텍스트로 인식하기 때문이다.-->
+<div th:text="${errorMessage}"></div>
 <form method="post">
     <input type="text" name="title" placeholder="제목" value="" /> <br>
     <textarea name="content"></textarea>
