@@ -1,12 +1,13 @@
 package com.thyme.domain.post.post.controller;
 
-import javax.naming.Binding;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.hibernate.validator.constraints.Length;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -15,9 +16,11 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 //@Validated  // @NotBlank, @Length를 사용하기 위해 @Validated 애너테이션을 클래스에 적용해야 한다
-			// Validation은 `spring-boot-starter-validation` dependency가 추가되어야 사용할 수 있다
+// Validation은 `spring-boot-starter-validation` dependency가 추가되어야 사용할 수 있다
+@Slf4j
 @RequestMapping("/posts")
 @Controller
 public class PostController {
@@ -47,10 +50,12 @@ public class PostController {
 	@Getter
 	public static class WriteForm { // doWrite()의 파라미터들을 클래스로 분리했다
 		// 필드명과 GET 파라미터명은 여전히 같아야 한다
-		@NotBlank(message = "제목을 입력해주세요.") @Length(min = 5, message = "제목은 5글자 이상입니다.")
+		@NotBlank(message = "제목을 입력해주세요.")
+		@Length(min = 5, message = "제목은 5글자 이상입니다.")
 		private String title; // null이면 안되고, 5글자 이상이어야 한다
 
-		@NotBlank(message = "제목은 5글자 이상입니다.") @Length(min = 10, message = "내용은 10글자 이상입니다.")
+		@NotBlank(message = "제목은 5글자 이상입니다.")
+		@Length(min = 10, message = "내용은 10글자 이상입니다.")
 		private String content; // null이면 안되고, 10글자 이상이어야 한다
 	}
 
@@ -65,7 +70,11 @@ public class PostController {
 		// 파라미터에 BindingResult를 추가하니, Validation이 무시된다
 		// BindingResult는 validation의 결과를 수집하고, 프로그램은 그대로 실행된다
 		if (bindingResult.hasErrors()) {
-			return "validation 실패";
+			String errorMessage = bindingResult.getFieldErrors()
+				.stream()
+				.map(fieldError -> fieldError.getDefaultMessage())
+				.collect(Collectors.joining("<br>"));
+			return getFormHtml(errorMessage);
 		}
 
 		return """
@@ -73,5 +82,16 @@ public class PostController {
 			<div>%s</div>
 			<div>%s</div>
 			""".formatted(form.getTitle(), form.getContent());
+	}
+
+	private String getFormHtml(String errorMessage) {
+		return """
+			<form method="post">
+				<div>%s</div>
+				<input type="text" name="title" placeholder="제목" /> <br>
+				<textarea name="content"></textarea>
+				<input type="submit" value="등록" />
+			</form>
+			""".formatted(errorMessage);
 	}
 }
