@@ -1,5 +1,8 @@
 <div>글 목록</div>
 <ul>
-    <li th:each="post : ${posts}" th:text="${post.getTitle()}"/>
+    <li th:each="post : ${posts}">
+        <!-- th:text가 있는 태그의 내부에는 뭘 넣어도 무시된다. -> 무조건 th:text의 내용으로 적용된다 -->
+        <a href="posts/detail"  th:text="${post.getTitle()}" />
+    </li>
 </ul>
 <a href="/posts/write">글쓰기</a>
