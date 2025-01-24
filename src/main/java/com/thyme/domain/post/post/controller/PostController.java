@@ -9,8 +9,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.thyme.domain.post.post.entity.Post;
@@ -132,8 +134,15 @@ public class PostController {
 		return "domain/post/post/list";
 	}
 
-	@GetMapping("/detail")
-	private String detail() {
+	@GetMapping("/detail/{id}")
+	private String detail(@PathVariable long id, Model model) {
+		Post post = posts.stream()
+			.filter(p -> p.getId() == id)
+			.findFirst()
+			.get();
+
+		model.addAttribute("post", post);
+
 		return "domain/post/post/detail";
 	}
 }
