@@ -27,13 +27,7 @@ public class PostController {
 	@GetMapping("/write")
 	@ResponseBody
 	public String showWrite() {
-		return """
-			<form method="post">
-				<input type="text" name="title" placeholder="제목" /> <br>
-				<textarea name="content"></textarea>
-				<input type="submit" value="등록" />
-			</form>
-			""";
+		return getFormHtml("", "", "");
 		// form: 사용자가 입력한 데이터를 서버로 보내준다
 		// form action: 응답을 어디로 보낼지 지정할 수 있다 '/' 하나로 앞주소가 대체된다
 		// form method="post"로 데이터 제출의 HTTP 메서드를 POST로 설정할 수 있다
@@ -74,7 +68,7 @@ public class PostController {
 				.sorted()
 				.map(msg -> msg.split("-")[1])
 				.collect(Collectors.joining("<br>"));
-			return getFormHtml(errorMessage);
+			return getFormHtml(errorMessage, form.getTitle(), form.getContent());
 		}
 
 		return """
@@ -84,14 +78,14 @@ public class PostController {
 			""".formatted(form.getTitle(), form.getContent());
 	}
 
-	private String getFormHtml(String errorMessage) {
+	private String getFormHtml(String errorMessage, String title, String content) {
 		return """
 			<form method="post">
 				<div>%s</div>
-				<input type="text" name="title" placeholder="제목" /> <br>
-				<textarea name="content"></textarea>
+				<input type="text" name="title" placeholder="제목" value=%s /> <br>
+				<textarea name="content">%s</textarea>
 				<input type="submit" value="등록" />
 			</form>
-			""".formatted(errorMessage);
+			""".formatted(errorMessage, title, content);
 	}
 }
