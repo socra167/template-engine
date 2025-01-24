@@ -57,9 +57,9 @@ public class PostController {
 
 	// 서버로부터 정보를 요청하기 위한 메서드로 GET을 사용한다
 	@GetMapping("/write")
-	@ResponseBody
+	// @ResponseBody // 반환으로 템플릿을 사용할 것이므로 비활성화해준다
 	public String showWrite() {
-		return getFormHtml("", "", "");
+		return "domain/post/post/write"; // templates 안부터 경로를 시작해서 .html은 생략한다
 		// form: 사용자가 입력한 데이터를 서버로 보내준다
 		// form action: 응답을 어디로 보낼지 지정할 수 있다 '/' 하나로 앞주소가 대체된다
 		// form method="post"로 데이터 제출의 HTTP 메서드를 POST로 설정할 수 있다
