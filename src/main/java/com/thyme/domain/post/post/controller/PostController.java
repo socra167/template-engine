@@ -2,7 +2,6 @@ package com.thyme.domain.post.post.controller;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.hibernate.validator.constraints.Length;
 import org.springframework.stereotype.Controller;
@@ -12,8 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.thyme.domain.post.post.entity.Post;
 
