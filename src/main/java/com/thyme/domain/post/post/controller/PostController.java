@@ -1,12 +1,10 @@
 package com.thyme.domain.post.post.controller;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 import org.hibernate.validator.constraints.Length;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -50,12 +48,12 @@ public class PostController {
 	@Getter
 	public static class WriteForm { // doWrite()의 파라미터들을 클래스로 분리했다
 		// 필드명과 GET 파라미터명은 여전히 같아야 한다
-		@NotBlank(message = "제목을 입력해주세요.")
-		@Length(min = 5, message = "제목은 5글자 이상입니다.")
+		@NotBlank(message = "01-제목을 입력해주세요.")
+		@Length(min = 5, message = "02-제목은 5글자 이상입니다.")
 		private String title; // null이면 안되고, 5글자 이상이어야 한다
 
-		@NotBlank(message = "내용을 입력해주세요.")
-		@Length(min = 10, message = "내용은 10글자 이상입니다.")
+		@NotBlank(message = "03-내용을 입력해주세요.")
+		@Length(min = 10, message = "04-내용은 10글자 이상입니다.")
 		private String content; // null이면 안되고, 10글자 이상이어야 한다
 	}
 
@@ -73,6 +71,8 @@ public class PostController {
 			String errorMessage = bindingResult.getFieldErrors()
 				.stream()
 				.map(fieldError -> fieldError.getDefaultMessage())
+				.sorted()
+				.map(msg -> msg.split("-")[1])
 				.collect(Collectors.joining("<br>"));
 			return getFormHtml(errorMessage);
 		}
