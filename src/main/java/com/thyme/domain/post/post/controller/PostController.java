@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.hibernate.validator.constraints.Length;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -85,8 +86,8 @@ public class PostController {
 	// 서버로 데이터를 제출하기 위한 메서드로 POST를 사용한다
 	@PostMapping("/write")
 	// @ResponseBody 	// ResponseBody를 적용하면 정직하게 데이터를 그대로 응답한다
-						// ResponseBody를 적용하지 않으면 반환값을 `템플릿`으로 인식한다
-	public String doWrite(@Valid WriteForm form, BindingResult bindingResult) {
+	// ResponseBody를 적용하지 않으면 반환값을 `템플릿`으로 인식한다
+	public String doWrite(@Valid WriteForm form, BindingResult bindingResult, Model model) {
 		// @ModelAttribute: 매개변수로 객체를 받겠다는 뜻
 		// Model Attribute에 Validation을 적용하려면 파라미터에 @Valid를 적용해야 한다
 		// @ModelAttribute는 생략할 수 있다
@@ -101,6 +102,10 @@ public class PostController {
 				.map(msg -> msg.split("-")[1])
 				.collect(Collectors.joining("<br>"));
 
+			model.addAttribute("errorMessage", errorMessage);
+			// model에 key-value 형태의 Attribute 추가
+			// 일반적으로 같은 이름으로 한다
+
 			return "domain/post/post/write";
 		}
 
@@ -113,8 +118,8 @@ public class PostController {
 		posts.add(post);
 
 		// return showList(); 	// 이렇게 보여주면 작성 완료 후 새로고침을 할 때마다 게시글이 또 추가된다
-								// 마지막 요청이 posts/write (POST)
-								// posts/write(POST)후 posts(GET)으로 리다이렉트 시켜서 브라우저가 posts(GET)을 기억하도록 하면 해결할 수 있다
+		// 마지막 요청이 posts/write (POST)
+		// posts/write(POST)후 posts(GET)으로 리다이렉트 시켜서 브라우저가 posts(GET)을 기억하도록 하면 해결할 수 있다
 
 		return "redirect:/posts"; // /posts로 리다이렉트, @ResponseBody를 적용하지 않아야 리다이렉트가 작동한다
 
