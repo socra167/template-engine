@@ -27,7 +27,8 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 public class PostController {
 
-	List<Post> posts = new ArrayList<>();
+	private List<Post> posts = new ArrayList<>();
+	private Long lastId = 3L;
 
 	public PostController() {
 		Post p1 = Post.builder()
@@ -100,6 +101,14 @@ public class PostController {
 				.collect(Collectors.joining("<br>"));
 			return getFormHtml(errorMessage, form.getTitle(), form.getContent());
 		}
+
+		Post post = Post.builder()
+			.id(++lastId)
+			.title(form.getTitle())
+			.content(form.getContent())
+			.build();
+
+		posts.add(post);
 
 		return """
 			<h1>게시물 조회</h1>
