@@ -131,4 +131,9 @@ public class PostController {
 		model.addAttribute("posts", posts);
 		return "domain/post/post/list";
 	}
+
+	@GetMapping("/detail")
+	private String detail() {
+		return "domain/post/post/detail";
+	}
 }
