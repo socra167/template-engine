@@ -122,6 +122,11 @@ public class PostController {
 		// @ResponseBody를 적용하지 않으면 반환값을 템플릿으로 인식하기 때문이다
 
 		// HTML 코드가 Java에 있으면 유지보수가 어려워진다 -> HTML 코드 분리
+
+		// HTML - Java는 서로 관계가 없다
+		// pure HTML : 프로그래밍 언어X -> 반복문 처리, 조건문 분기 등 불가능
+		// template HTML : 자바 클래스로 변환해 읽을 수 있게 만든다 -> 프로그래밍 처리 -> 완성된 HTML
+		//		- Thymeleaf engine, JSP 엔진 규칙에 맞게 작성하면 된다
 	}
 
 	@GetMapping
