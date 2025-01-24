@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -58,7 +59,7 @@ public class PostController {
 	// 서버로부터 정보를 요청하기 위한 메서드로 GET을 사용한다
 	@GetMapping("/write")
 	// @ResponseBody // 반환으로 템플릿을 사용할 것이므로 비활성화해준다
-	public String showWrite() {
+	public String showWrite(WriteForm writeForm, BindingResult bindingResult) {
 		return "domain/post/post/write"; // templates 안부터 경로를 시작해서 .html은 생략한다
 		// form: 사용자가 입력한 데이터를 서버로 보내준다
 		// form action: 응답을 어디로 보낼지 지정할 수 있다 '/' 하나로 앞주소가 대체된다
@@ -92,6 +93,9 @@ public class PostController {
 		// Model Attribute에 Validation을 적용하려면 파라미터에 @Valid를 적용해야 한다
 		// @ModelAttribute는 생략할 수 있다
 
+		// @ModelAttribute("form"): model의 Attribute로 form이라는 key로 값을 자동으로 넘겨준다!
+		// 이것도 생략할 수 있다. writeform이라는 파라미터 클래스명으로 model attribute에 자동으로 넘어간다
+
 		// 파라미터에 BindingResult를 추가하니, Validation이 무시된다
 		// BindingResult는 validation의 결과를 수집하고, 프로그램은 그대로 실행된다
 		if (bindingResult.hasErrors()) {
@@ -103,8 +107,6 @@ public class PostController {
 				.collect(Collectors.joining("<br>"));
 
 			model.addAttribute("errorMessage", errorMessage);
-			model.addAttribute("title", form.getTitle());
-			model.addAttribute("content", form.getContent());
 			// model에 key-value 형태의 Attribute 추가
 			// 일반적으로 같은 이름으로 한다
 

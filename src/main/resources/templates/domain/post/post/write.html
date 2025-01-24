@@ -1,9 +1,10 @@
+
 <!--<div th:if="${#fields.hasAnyErrors()}">-->
-<!--    <div th:each="err : ${#fields.allErrors()}" th:text="${err}" />-->
+<!--    <div th:each="err : ${#fields.allErrors()}" th:text="${err}"/>-->
 <!--</div>-->
 <div th:utext="${errorMessage}"></div>
-<form method="post">
-    <input type="text" name="title" placeholder="제목" th:value="${title}"/> <br>
-    <textarea name="content" th:text="${content}"></textarea>
-    <input type="submit" value="등록"/>
+<form method="post" th:object="${writeForm}">
+    <input type="text" name="title" placeholder="제목" th:value="*{title}"/> <br>
+    <textarea name="content" th:text="*{content}"></textarea> <br>
+    <input type="submit" value="등록"/> <br>
 </form>
