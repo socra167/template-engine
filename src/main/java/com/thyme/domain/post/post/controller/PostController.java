@@ -1,7 +1,6 @@
 package com.thyme.domain.post.post.controller;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -101,7 +100,8 @@ public class PostController {
 				.sorted()
 				.map(msg -> msg.split("-")[1])
 				.collect(Collectors.joining("<br>"));
-			return getFormHtml(errorMessage, form.getTitle(), form.getContent());
+
+			return "domain/post/post/write";
 		}
 
 		Post post = Post.builder()
@@ -122,17 +122,6 @@ public class PostController {
 		// @ResponseBody를 적용하지 않으면 반환값을 템플릿으로 인식하기 때문이다
 
 		// HTML 코드가 Java에 있으면 유지보수가 어려워진다 -> HTML 코드 분리
-	}
-
-	private String getFormHtml(String errorMessage, String title, String content) {
-		return """
-			<form method="post">
-				<div>%s</div>
-				<input type="text" name="title" placeholder="제목" value="%s" /> <br>
-				<textarea name="content">%s</textarea>
-				<input type="submit" value="등록" />
-			</form>
-			""".formatted(errorMessage, title, content);
 	}
 
 	@GetMapping
