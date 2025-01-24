@@ -1,8 +1,5 @@
 package com.thyme.domain.post.post.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.hibernate.validator.constraints.Length;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,46 +10,24 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.thyme.domain.post.post.entity.Post;
+import com.thyme.domain.post.post.service.PostService;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 //@Validated  // @NotBlank, @Length를 사용하기 위해 @Validated 애너테이션을 클래스에 적용해야 한다
 // Validation은 `spring-boot-starter-validation` dependency가 추가되어야 사용할 수 있다
 @Slf4j
+@RequiredArgsConstructor
 @RequestMapping("/posts")
 @Controller
 public class PostController {
 
-	private List<Post> posts = new ArrayList<>();
-	private Long lastId = 3L;
-
-	public PostController() {
-		Post p1 = Post.builder()
-			.id(1L)
-			.title("title1")
-			.content("content1")
-			.build();
-
-		Post p2 = Post.builder()
-			.id(2L)
-			.title("title2")
-			.content("content2")
-			.build();
-
-		Post p3 = Post.builder()
-			.id(3L)
-			.title("title3")
-			.content("content3")
-			.build();
-
-		posts.add(p1);
-		posts.add(p2);
-		posts.add(p3);
-	}
+	private final PostService postService;
 
 	// 서버로부터 정보를 요청하기 위한 메서드로 GET을 사용한다
 	@GetMapping("/write")
@@ -100,13 +75,7 @@ public class PostController {
 			return "domain/post/post/write";
 		}
 
-		Post post = Post.builder()
-			.id(++lastId)
-			.title(form.getTitle())
-			.content(form.getContent())
-			.build();
-
-		posts.add(post);
+		postService.write(form.getTitle(), form.getContent());
 
 		// return showList(); 	// 이렇게 보여주면 작성 완료 후 새로고침을 할 때마다 게시글이 또 추가된다
 		// 마지막 요청이 posts/write (POST)
@@ -127,19 +96,14 @@ public class PostController {
 
 	@GetMapping
 	private String showList(Model model) {
-		model.addAttribute("posts", posts);
+		model.addAttribute("posts", postService.getPosts());
 		return "domain/post/post/list";
 	}
 
 	@GetMapping("/detail/{id}")
 	private String detail(@PathVariable long id, Model model) {
-		Post post = posts.stream()
-			.filter(p -> p.getId() == id)
-			.findFirst()
-			.get();
-
+		Post post = postService.getPost(id);
 		model.addAttribute("post", post);
-
 		return "domain/post/post/detail";
 	}
 }
