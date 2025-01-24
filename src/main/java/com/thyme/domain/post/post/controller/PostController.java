@@ -1,6 +1,7 @@
 package com.thyme.domain.post.post.controller;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -110,11 +111,13 @@ public class PostController {
 
 		posts.add(post);
 
-		return """
-			<h1>게시물 조회</h1>
-			<div>%s</div>
-			<div>%s</div>
-			""".formatted(form.getTitle(), form.getContent());
+		return showList(); // 이렇게 보여주면 작성 완료 후 새로고침을 할 때마다 게시글이 또 추가된다
+
+		// return """
+		// 	<h1>게시물 조회</h1>
+		// 	<div>%s</div>
+		// 	<div>%s</div>
+		// 	""".formatted(form.getTitle(), form.getContent());
 	}
 
 	private String getFormHtml(String errorMessage, String title, String content) {
@@ -131,14 +134,16 @@ public class PostController {
 	@GetMapping
 	@ResponseBody
 	private String showList() {
+		String postTitles = posts.stream()
+			.map(post -> "<li>" + post.getTitle() + "</li>")
+			.collect(Collectors.joining());
+
 		return """
 			<div>글 목록</div>
 			<ul>
-				<li>글1</li>
-				<li>글2</li>
-				<li>글3</li>
+				%s
 				<a href="/posts/write">글쓰기</a>
 			</ul>
-			""";
+			""".formatted(postTitles);
 	}
 }
