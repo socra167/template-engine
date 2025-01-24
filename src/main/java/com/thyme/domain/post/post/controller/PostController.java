@@ -9,7 +9,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -99,17 +98,6 @@ public class PostController {
 		// 파라미터에 BindingResult를 추가하니, Validation이 무시된다
 		// BindingResult는 validation의 결과를 수집하고, 프로그램은 그대로 실행된다
 		if (bindingResult.hasErrors()) {
-			String errorMessage = bindingResult.getFieldErrors()
-				.stream()
-				.map(fieldError -> fieldError.getDefaultMessage())
-				.sorted()
-				.map(msg -> msg.split("-")[1])
-				.collect(Collectors.joining("<br>"));
-
-			model.addAttribute("errorMessage", errorMessage);
-			// model에 key-value 형태의 Attribute 추가
-			// 일반적으로 같은 이름으로 한다
-
 			return "domain/post/post/write";
 		}
 
