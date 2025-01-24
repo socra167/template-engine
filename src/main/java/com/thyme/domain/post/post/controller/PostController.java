@@ -103,6 +103,8 @@ public class PostController {
 				.collect(Collectors.joining("<br>"));
 
 			model.addAttribute("errorMessage", errorMessage);
+			model.addAttribute("title", form.getTitle());
+			model.addAttribute("content", form.getContent());
 			// model에 key-value 형태의 Attribute 추가
 			// 일반적으로 같은 이름으로 한다
 
